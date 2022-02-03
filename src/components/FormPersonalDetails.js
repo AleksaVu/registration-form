@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 
 
@@ -16,9 +17,10 @@ export class FormPersonalDetails extends Component {
         
     return( 
         
-       <React.Fragment>
-       <h1>Registration form</h1>
-       <Box sx={{ m: 5 }}>
+       <React.Fragment>       
+       <Container maxWidth="md">
+        <Box sx={{ m:5 }}> 
+            <h1>Personal Details</h1>
             <TextField 
                 placeholder="Enter Your First Name"
                 label="First Name"
@@ -46,8 +48,10 @@ export class FormPersonalDetails extends Component {
                 onChange={this.props.handleChange}
                 fullWidth>
             </TextField>
+            <br/><br/>
             <Button variant="contained" onClick={this.continue}>Continue</Button>
-        </Box>
+            </Box>
+        </Container>
        </React.Fragment>
        
     );
