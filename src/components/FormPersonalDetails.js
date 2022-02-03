@@ -13,7 +13,7 @@ export class FormPersonalDetails extends Component {
     
     render() {
         const { values, handleChange } = this.props;
-        console.log("test", { values, handleChange })
+         
         
     return( 
         

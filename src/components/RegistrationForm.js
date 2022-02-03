@@ -4,14 +4,14 @@ import FormUserDetails from './FormUserDetails';
 
 export class RegistrationForm extends Component {
   state={
-    step: 1,
+    step: 1,    
     firstName:"",
     lastName:"",
     email: "",
     username: "",
     password: "",
     passwordConfirm: "",
-    check: false
+    check: true,
   }
 
 //   Proceed to the next step method
@@ -35,6 +35,16 @@ export class RegistrationForm extends Component {
         this.setState({ [e.target.name]: e.target.value });
     };
 
+    handleChangeCheck = (e) => {
+        this.setState({ check: e.target.checked });   
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state)
+    };
+
+
     render() {
         const {step} = this.state;
         const { firstName, lastName, email, username, password, passwordConfirm, check } = this.state;
@@ -47,7 +57,7 @@ export class RegistrationForm extends Component {
              )
         case 2:
             return(
-                <FormUserDetails nextStep={this.nextStep} prevStep={this.prevStep} handleChange={this.handleChange} values={values}/>
+                <FormUserDetails handleChangeCheck={this.handleChangeCheck} handleSubmit={this.handleSubmit} prevStep={this.prevStep} handleChange={this.handleChange} values={values}/>
             )  
     }   
   }

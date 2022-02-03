@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 
 export class FormUserDetails extends Component {
     continue = (e) => {
@@ -17,8 +19,8 @@ export class FormUserDetails extends Component {
     }
     
     render() {
-        const { values, handleChange } = this.props;
-        console.log("test", { values, handleChange })
+        const { values, handleChange, handleSubmit, handleChangeCheck } = this.props;
+       
         
     return( 
         
@@ -32,16 +34,16 @@ export class FormUserDetails extends Component {
                 name= "username"
                 defaultValue={values.username}
                 margin="normal"
-                onChange={this.props.handleChange}
+                onChange={handleChange}
                 fullWidth>
-            </TextField>        
+            </TextField>
             <TextField 
                 placeholder="Enter Password"
                 label="Password"
                 name= "password"
                 defaultValue={values.password}
                 margin="normal"
-                onChange={this.props.handleChange}
+                onChange={handleChange}
                 fullWidth>
             </TextField>
             <TextField 
@@ -50,12 +52,16 @@ export class FormUserDetails extends Component {
                 name= "passwordConfirm"
                 defaultValue={values.passwordConfirm}
                 margin="normal"
-                onChange={this.props.handleChange}
+                onChange={handleChange}
                 fullWidth>
-            </TextField>  
-            <Checkbox defaultChecked label="Accept all"/>    <br />      
+            </TextField>
+            
+            <FormGroup>
+            <FormControlLabel control={<Checkbox checked={values.check} onChange={handleChangeCheck} name="check"/>} label="Accept Terms and Conditions" />
+            </FormGroup>
+            <br />      
             <Button sx={{ mr:5 }} variant="outlined" onClick={this.back}>Go Back</Button>
-            <Button variant="contained" onClick={this.continue}>Submit</Button>
+            <Button type="submit" variant="contained" onClick={this.props.handleSubmit}>Submit</Button>
         </Box>
         </Container>
        </React.Fragment>
