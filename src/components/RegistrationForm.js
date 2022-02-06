@@ -3,6 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import FormPersonalDetails from "./FormPersonalDetails";
 import FormUserDetails from "./FormUserDetails";
+import Success from "./Success";
 
 export class RegistrationForm extends Component {
   state = {
@@ -132,6 +133,7 @@ export class RegistrationForm extends Component {
       case 2:
         return (
           <FormUserDetails
+            nextStep={this.nextStep}
             handleChangeCheck={this.handleChangeCheck}
             prevStep={this.prevStep}
             handleChange={this.handleChange}
@@ -139,6 +141,8 @@ export class RegistrationForm extends Component {
             fields={fields}
           />
         );
+      case 3:
+        return <Success />;
     }
   }
 }

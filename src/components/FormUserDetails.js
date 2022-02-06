@@ -50,19 +50,19 @@ export class FormUserDetails extends Component {
     e.preventDefault();
     const fieldsArray = this.submitDataFields();
     console.log(fieldsArray);
-    //window.location.reload(false);
     axios
-      .post("", fieldsArray)
+      .post("https://jsonplaceholder.typicode.com/posts", fieldsArray)
       .then(response => {
         console.log(response);
       })
       .catch(error => {
         console.log(error);
       });
+    this.props.nextStep();
   };
 
   render() {
-    const { values, handleChange } = this.props;
+    const { values, handleChange, nextStep } = this.props;
     return (
       <React.Fragment>
         <Container maxWidth="md">
