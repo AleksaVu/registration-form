@@ -27,8 +27,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 - Style form 
 
 ## Demo
-![Alt text](readme/preview1.png?raw=true "Personal info")
-![Alt text](readme/preview2.png?raw=true "User info")
-![Alt text](readme/preview3.png?raw=true "Success page")
+![Alt text](./readme/preview1.png?raw=true "Personal info")
+![Alt text](./readme/preview2.png?raw=true "User info")
+![Alt text](./readme/preview3.png?raw=true "Success page")
 
 
