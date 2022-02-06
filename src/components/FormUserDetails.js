@@ -2,13 +2,33 @@ import React, { Component } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import CheckboxValidatorElement from "./CheckboxValidatorElement";
 
 export class FormUserDetails extends Component {
+  state = {
+    disable_submit: true,
+  };
+
+  componentDidMount() {
+    ValidatorForm.addValidationRule("isTruthy", value => value);
+    ValidatorForm.addValidationRule("isPasswordMatch", value => {
+      if (value !== this.props.values.password) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  componentWillUnmount() {
+    // remove rule when it is not needed
+    ValidatorForm.removeValidationRule("isPasswordMatch");
+  }
+
   submitDataFields = () => {
+    //this.setState({ disable_submit: true });
     let submitObj = {};
     let fieldsArray = [];
     Object.entries(this.props.fields).forEach(([key, val]) => {
@@ -22,11 +42,33 @@ export class FormUserDetails extends Component {
 
     submitObj["fields"] = fieldsArray;
     console.log(submitObj);
+    //window.location.reload(false);
+    return submitObj;
   };
 
   back = e => {
     e.preventDefault();
     this.props.prevStep();
+  };
+
+  handleChangeSubmit = e => {
+    e.preventDefault();
+    let i = 0;
+    Object.entries(this.props.fields).forEach(([key, val]) => {
+      if (val === "") {
+        i++;
+      }
+    });
+    if (
+      i === 0 &&
+      this.props.values.check === true &&
+      this.props.values.password === this.props.values.passwordConfirm
+    ) {
+      this.setState({ disable_submit: false });
+    } else {
+      this.setState({ disable_submit: true });
+      console.log(this.state.disable_submit);
+    }
   };
 
   render() {
@@ -39,7 +81,8 @@ export class FormUserDetails extends Component {
             <h1>User Details</h1>
 
             <ValidatorForm
-              onSubmit={this.submitDataFields}
+              onChange={this.handleChangeSubmit}
+              onSubmit={this.handleSubmit}
               onError={errors => console.log(errors)}>
               <TextValidator
                 validators={[
@@ -57,25 +100,23 @@ export class FormUserDetails extends Component {
                 placeholder="Enter Username"
                 label="Username"
                 name="username"
-                // defaultValue={values.username}
                 value={values.username}
                 margin="normal"
                 onChange={handleChange}
                 fullWidth
               />
-
               <TextValidator
                 validators={[
                   "required",
-                  "minStringLength:4",
-                  "maxStringLength: 20",
-                  "matchRegexp:^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+                  "minStringLength:6",
+                  "maxStringLength: 16",
+                  "matchRegexp:^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
                 ]}
                 errorMessages={[
                   "this field is required",
-                  "username too short",
-                  "username too long",
-                  "username not valid",
+                  "password too short",
+                  "password too long",
+                  "password too week, must containc at least one uppercase, lowercase, numbers and special character",
                 ]}
                 placeholder="Enter Password"
                 type="password"
@@ -89,15 +130,17 @@ export class FormUserDetails extends Component {
               <TextValidator
                 validators={[
                   "required",
-                  "minStringLength:4",
-                  "maxStringLength: 20",
-                  "matchRegexp:^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+                  "isPasswordMatch",
+                  "minStringLength:8",
+                  "maxStringLength: 16",
+                  "matchRegexp:^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
                 ]}
                 errorMessages={[
                   "this field is required",
-                  "username too short",
-                  "username too long",
-                  "username not valid",
+                  "password mismatch",
+                  "password too short",
+                  "password too long",
+                  "password mismatch",
                 ]}
                 placeholder="Confirm Password"
                 type="password"
@@ -108,11 +151,13 @@ export class FormUserDetails extends Component {
                 onChange={handleChange}
                 fullWidth
               />
-
               <FormGroup>
                 <FormControlLabel
                   control={
-                    <Checkbox
+                    <CheckboxValidatorElement
+                      validators={["isTruthy"]}
+                      errorMessages={["this field is required"]}
+                      value={values.check}
                       checked={values.check}
                       onChange={handleChangeCheck}
                       name="check"
@@ -122,10 +167,15 @@ export class FormUserDetails extends Component {
                 />
               </FormGroup>
               <br />
+              <br />
               <Button sx={{ mr: 5 }} variant="outlined" onClick={this.back}>
                 Go Back
               </Button>
-              <Button type="submit" variant="contained">
+              <Button
+                // type="submit"
+                variant="contained"
+                disabled={this.state.disable_submit}
+                onClick={this.submitDataFields}>
                 Submit
               </Button>
             </ValidatorForm>

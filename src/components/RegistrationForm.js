@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
 import FormPersonalDetails from "./FormPersonalDetails";
 import FormUserDetails from "./FormUserDetails";
 
@@ -11,8 +14,14 @@ export class RegistrationForm extends Component {
     username: "",
     password: "",
     passwordConfirm: "",
-    check: true,
+    check: false,
+    loading: true,
   };
+
+  componentDidMount() {
+    //neka fetch funkcija
+    this.setState({ loading: false });
+  }
 
   //   Proceed to the next step method
   nextStep = () => {
@@ -35,16 +44,32 @@ export class RegistrationForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  // Handle check input cahnges
   handleChangeCheck = e => {
     this.setState({ check: e.target.checked });
   };
 
+  // Handle submit
   handleSubmit = e => {
     e.preventDefault();
     console.log(this.state);
   };
 
   render() {
+    if (this.state.loading === true) {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "100vh",
+          }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+
     const { step } = this.state;
     const {
       firstName,
