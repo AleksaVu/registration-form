@@ -38,8 +38,8 @@ export class FormPersonalDetails extends Component {
                 ]}
                 placeholder="Enter Your First Name"
                 label="First Name"
-                name="firstName"
-                value={values.firstName}
+                name="fname"
+                value={values.fname}
                 margin="normal"
                 fullWidth
               />
@@ -60,8 +60,8 @@ export class FormPersonalDetails extends Component {
                 ]}
                 placeholder="Enter Your Last Name"
                 label="Last Name"
-                name="lastName"
-                value={values.lastName}
+                name="lname"
+                value={values.lname}
                 margin="normal"
                 fullWidth></TextValidator>
 

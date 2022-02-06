@@ -6,12 +6,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import CheckboxValidatorElement from "./CheckboxValidatorElement";
+import axios from "axios";
 
 export class FormUserDetails extends Component {
-  state = {
-    disable_submit: true,
-  };
-
   componentDidMount() {
     ValidatorForm.addValidationRule("isTruthy", value => value);
     ValidatorForm.addValidationRule("isPasswordMatch", value => {
@@ -41,8 +38,6 @@ export class FormUserDetails extends Component {
     });
 
     submitObj["fields"] = fieldsArray;
-    console.log(submitObj);
-    //window.location.reload(false);
     return submitObj;
   };
 
@@ -51,29 +46,23 @@ export class FormUserDetails extends Component {
     this.props.prevStep();
   };
 
-  handleChangeSubmit = e => {
+  handleFormSubmit = e => {
     e.preventDefault();
-    let i = 0;
-    Object.entries(this.props.fields).forEach(([key, val]) => {
-      if (val === "") {
-        i++;
-      }
-    });
-    if (
-      i === 0 &&
-      this.props.values.check === true &&
-      this.props.values.password === this.props.values.passwordConfirm
-    ) {
-      this.setState({ disable_submit: false });
-    } else {
-      this.setState({ disable_submit: true });
-      console.log(this.state.disable_submit);
-    }
+    const fieldsArray = this.submitDataFields();
+    console.log(fieldsArray);
+    //window.location.reload(false);
+    axios
+      .post("", fieldsArray)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   render() {
-    const { values, handleChange, handleSubmit, handleChangeCheck } =
-      this.props;
+    const { values, handleChange } = this.props;
     return (
       <React.Fragment>
         <Container maxWidth="md">
@@ -81,8 +70,7 @@ export class FormUserDetails extends Component {
             <h1>User Details</h1>
 
             <ValidatorForm
-              onChange={this.handleChangeSubmit}
-              onSubmit={this.handleSubmit}
+              onSubmit={this.handleFormSubmit}
               onError={errors => console.log(errors)}>
               <TextValidator
                 validators={[
@@ -116,7 +104,7 @@ export class FormUserDetails extends Component {
                   "this field is required",
                   "password too short",
                   "password too long",
-                  "password too week, must containc at least one uppercase, lowercase, numbers and special character",
+                  "password too week, must contain at least one uppercase, lowercase, numbers and special character",
                 ]}
                 placeholder="Enter Password"
                 type="password"
@@ -131,7 +119,7 @@ export class FormUserDetails extends Component {
                 validators={[
                   "required",
                   "isPasswordMatch",
-                  "minStringLength:8",
+                  "minStringLength:6",
                   "maxStringLength: 16",
                   "matchRegexp:^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
                 ]}
@@ -145,8 +133,8 @@ export class FormUserDetails extends Component {
                 placeholder="Confirm Password"
                 type="password"
                 label="Confirm Password"
-                name="passwordConfirm"
-                value={values.passwordConfirm}
+                name="password_confirm"
+                value={values.password_confirm}
                 margin="normal"
                 onChange={handleChange}
                 fullWidth
@@ -159,7 +147,7 @@ export class FormUserDetails extends Component {
                       errorMessages={["this field is required"]}
                       value={values.check}
                       checked={values.check}
-                      onChange={handleChangeCheck}
+                      onChange={handleChange}
                       name="check"
                     />
                   }
@@ -172,10 +160,9 @@ export class FormUserDetails extends Component {
                 Go Back
               </Button>
               <Button
-                // type="submit"
                 variant="contained"
-                disabled={this.state.disable_submit}
-                onClick={this.submitDataFields}>
+                disabled={values.disable_submit}
+                onClick={this.handleFormSubmit}>
                 Submit
               </Button>
             </ValidatorForm>

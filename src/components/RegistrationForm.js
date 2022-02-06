@@ -1,25 +1,25 @@
 import React, { Component } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-
 import FormPersonalDetails from "./FormPersonalDetails";
 import FormUserDetails from "./FormUserDetails";
 
 export class RegistrationForm extends Component {
   state = {
     step: 1,
-    firstName: "",
-    lastName: "",
+    fname: "",
+    lname: "",
     email: "",
     username: "",
     password: "",
-    passwordConfirm: "",
+    password_confirm: "",
     check: false,
     loading: true,
+    disable_submit: true,
   };
 
   componentDidMount() {
-    //neka fetch funkcija
+    //  mjesto za neku fetch funkcija
     this.setState({ loading: false });
   }
 
@@ -39,20 +39,40 @@ export class RegistrationForm extends Component {
     });
   };
 
-  // Handle input cahnges
+  // Handle all input changes
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    this.setState({ check: e.target.checked });
+
+    if (
+      this.state.username !== "" &&
+      this.state.password !== "" &&
+      this.state.password_confirm !== "" &&
+      this.state.password === this.state.password_confirm
+    ) {
+      if (
+        this.state.check === false &&
+        this.state.password === this.state.password_confirm
+      ) {
+        this.setState({ disable_submit: false });
+        if (
+          this.state.check === true &&
+          this.state.password === this.state.password_confirm
+        ) {
+          this.setState({ disable_submit: false });
+          console.log(this.state.disable_submit);
+        }
+      } else {
+        this.setState({ disable_submit: true });
+      }
+    } else {
+      this.setState({ disable_submit: true });
+    }
   };
 
   // Handle check input cahnges
   handleChangeCheck = e => {
     this.setState({ check: e.target.checked });
-  };
-
-  // Handle submit
-  handleSubmit = e => {
-    e.preventDefault();
-    console.log(this.state);
   };
 
   render() {
@@ -72,30 +92,32 @@ export class RegistrationForm extends Component {
 
     const { step } = this.state;
     const {
-      firstName,
-      lastName,
+      fname,
+      lname,
       email,
       username,
       password,
-      passwordConfirm,
+      password_confirm,
       check,
+      disable_submit,
     } = this.state;
     const values = {
-      firstName,
-      lastName,
+      fname,
+      lname,
       email,
       username,
       password,
-      passwordConfirm,
+      password_confirm,
       check,
+      disable_submit,
     };
     const fields = {
-      firstName,
-      lastName,
+      fname,
+      lname,
       email,
       username,
       password,
-      passwordConfirm,
+      password_confirm,
     };
 
     switch (step) {
@@ -111,7 +133,6 @@ export class RegistrationForm extends Component {
         return (
           <FormUserDetails
             handleChangeCheck={this.handleChangeCheck}
-            handleSubmit={this.handleSubmit}
             prevStep={this.prevStep}
             handleChange={this.handleChange}
             values={values}
