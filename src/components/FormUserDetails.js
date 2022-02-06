@@ -25,7 +25,6 @@ export class FormUserDetails extends Component {
   }
 
   submitDataFields = () => {
-    //this.setState({ disable_submit: true });
     let submitObj = {};
     let fieldsArray = [];
     Object.entries(this.props.fields).forEach(([key, val]) => {
